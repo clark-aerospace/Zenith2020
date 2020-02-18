@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>map.qml</file>
+        <file>wifi-24px.svg</file>
+        <file>straighten-24px.svg</file>
     </qresource>
 </RCC>

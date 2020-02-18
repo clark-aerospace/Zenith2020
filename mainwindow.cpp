@@ -3,12 +3,26 @@
 #include <iostream>
 
 #include <QSizePolicy>
+#include <settingswindow.h>
+#include <QMenuBar>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
 
     this->setWindowTitle(QString("Zenith"));
+
+    QMenuBar* menuBar = new QMenuBar(0);
+    this->setMenuBar(menuBar);
+
+    QAction* prefAction = new QAction();
+    prefAction->setText("Preferences");
+    prefAction->setMenuRole(QAction::MenuRole::PreferencesRole);
+    connect(prefAction, &QAction::triggered, this, &MainWindow::ShowPreferences);
+    QMenu* menu = new QMenu(0);
+    menuBar->addMenu(menu);
+
+    menu->addAction(prefAction);
 
 
     mapView = new QQuickWidget;
@@ -107,7 +121,7 @@ void MainWindow::BuildRocketTreeWidgetItems(QTreeWidget* wid) {
         component_payloadBatteryItem = new QTreeWidgetItem(component_payloadItem);
         component_payloadBatteryItem->setText(0, QString("Battery"));
         component_payloadBatteryItem->setText(1, QString("95%"));
-//        component_payloadBatteryItem->setIcon(0, QIcon(":/Battery.png"));
+        component_payloadBatteryItem->setIcon(0, QIcon(":/wifi-24px.svg"));
 
         // payload - temperature
         component_payloadTempItem = new QTreeWidgetItem(component_payloadItem);
@@ -149,6 +163,11 @@ void MainWindow::BuildRocketTreeWidgetItems(QTreeWidget* wid) {
         component_airbrakesTempItem = new QTreeWidgetItem(component_airbrakesItem);
         component_airbrakesTempItem->setText(0, QString("Temperature"));
         component_airbrakesTempItem->setText(1, QString("102°C"));
+}
+
+void MainWindow::ShowPreferences() {
+    SettingsWindow* beep = new SettingsWindow;
+    beep->show();
 }
 
 MainWindow::~MainWindow()

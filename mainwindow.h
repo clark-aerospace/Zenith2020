@@ -56,6 +56,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     void BuildRocketTreeWidgetItems(QTreeWidget* wid);
+    void ShowPreferences();
     ~MainWindow();
 };
 #endif // MAINWINDOW_H
