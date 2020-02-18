@@ -1,28 +1,45 @@
 #include "mainwindow.h"
 
-#include <iostream>
 
-#include <QSizePolicy>
-#include <settingswindow.h>
-#include <QMenuBar>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
 
     this->setWindowTitle(QString("Zenith"));
+    this->setUnifiedTitleAndToolBarOnMac(true);
 
-    QMenuBar* menuBar = new QMenuBar(0);
+    this->menuBar = new QMenuBar(0);
     this->setMenuBar(menuBar);
 
-    QAction* prefAction = new QAction();
-    prefAction->setText("Preferences");
-    prefAction->setMenuRole(QAction::MenuRole::PreferencesRole);
-    connect(prefAction, &QAction::triggered, this, &MainWindow::ShowPreferences);
-    QMenu* menu = new QMenu(0);
-    menuBar->addMenu(menu);
+    this->prefAction = new QAction();
+    this->prefAction->setText("Preferences");
+    this->prefAction->setMenuRole(QAction::MenuRole::PreferencesRole);
+    connect(this->prefAction, &QAction::triggered, this, &MainWindow::ShowPreferences);
+    this->menu = new QMenu(0);
+    this->menuBar->addMenu(this->menu);
 
-    menu->addAction(prefAction);
+    this->menu->addAction(this->prefAction);
+
+
+    // Toolbar
+    this->toolbar = new QToolBar();
+    this->toolbar->setMovable(false);
+    this->toolbar->setFloatable(false);
+    this->toolbar->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextUnderIcon);
+
+    // Play/Stop action
+    this->playStopAction = new QAction();
+    this->playStopAction->setIcon(QIcon(":/play_arrow-24px.svg"));
+    this->playStopAction->setText("Collect");
+
+    this->toolbar->addAction(this->playStopAction);
+
+    this->addToolBar(this->toolbar);
+
+
+
+
 
 
     mapView = new QQuickWidget;

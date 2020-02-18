@@ -3,6 +3,7 @@
 #include <QtWidgets>
 #include <QSerialPortInfo>
 #include <QActionGroup>
+#include "tintableicon.h"
 
 SettingsWindow::SettingsWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -14,7 +15,8 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QMainWindow(parent)
     toolbar->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextUnderIcon);
 
     QAction* serialAction = new QAction;
-    QIcon* serialIcon = new QIcon(QString(":/wifi-24px.svg"));
+    TintableIcon* serialIcon = new TintableIcon(QString(":/wifi-24px.svg"));
+//    serialIcon->setTintColor(QColor("white"));
     serialIcon->setIsMask(true);
     serialAction->setIcon(*serialIcon);
     serialAction->setText("Serial");
@@ -22,7 +24,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QMainWindow(parent)
 
 
     QAction* unitsAction = new QAction;
-    QIcon* unitsIcon = new QIcon(QString(":/straighten-24px.svg"));
+    TintableIcon* unitsIcon = new TintableIcon(QString(":/straighten-24px.svg"));
     unitsIcon->setIsMask(true);
     unitsAction->setIcon(*unitsIcon);
     unitsAction->setText("Units");

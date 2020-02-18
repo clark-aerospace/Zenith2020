@@ -10,9 +10,24 @@
 #include <QTreeWidgetItem>
 
 #include <QQuickWidget>
+#include <iostream>
+
+#include <QSizePolicy>
+#include <settingswindow.h>
+#include <QMenuBar>
+#include <QtWidgets>
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+
+    QMenuBar* menuBar;
+    QAction* prefAction;
+    QMenu* menu;
+
+    QToolBar* toolbar;
+    QAction* playStopAction;
+
     QStatusBar* statusBar;
     QLabel* lastUpdatedLabel;
     QLabel* connectedToSerialLabel;

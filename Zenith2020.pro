@@ -21,11 +21,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    settingswindow.cpp
+    settingswindow.cpp \
+    tintableicon.cpp
 
 HEADERS += \
     mainwindow.h \
-    settingswindow.h
+    settingswindow.h \
+    tintableicon.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
