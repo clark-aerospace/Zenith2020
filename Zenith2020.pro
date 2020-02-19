@@ -22,11 +22,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    map.cpp \
     settingswindow.cpp \
     tintableicon.cpp
 
 HEADERS += \
     mainwindow.h \
+    map.h \
     settingswindow.h \
     tintableicon.h
 

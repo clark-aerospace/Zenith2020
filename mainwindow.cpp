@@ -37,36 +37,16 @@ MainWindow::MainWindow(QWidget *parent)
     this->playStopAction = new QAction();
     this->playStopAction->setIcon(QIcon(":/play_arrow-24px.svg"));
     this->playStopAction->setText("Collect");
+    connect(this->playStopAction, &QAction::triggered, this, &MainWindow::TogglePlayStop);
 
     this->toolbar->addAction(this->playStopAction);
 
+
     this->addToolBar(this->toolbar);
 
-
-
-
-
-
-    mapView = new QQuickWidget;
-    mapView->setSource(QUrl("qrc:/map.qml"));
-    mapView->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    mapView->setAttribute(Qt::WA_TranslucentBackground, true);
-    mapView->setClearColor(Qt::white);
-
-    QObject* map = mapView->rootObject()->findChild<QObject*>("map");
-    qDebug() << "center: ";
-    qDebug() << map->property("center").value<QGeoCoordinate>();
-
-    QGeoCoordinate* g = new QGeoCoordinate(20.8821458,-89.5466136);
-
-    qDebug() << map->setProperty("center", QVariant::fromValue(g));
-    qDebug() << map->setProperty("location", QVariant::fromValue(g));
-    qDebug() << QQmlProperty(map, "center").isValid();
-    qDebug() << QQmlProperty(map, "center").write(QVariant::fromValue(g));
-
-    qDebug() << map->property("center").value<QGeoCoordinate>();
-
-    this->setCentralWidget(mapView);
+    this->mapView = new Map;
+    connect(this->mapView, &Map::coordinatesChanged, this, &MainWindow::UpdateMap);
+    this->setCentralWidget(this->mapView);
 
 
     // Rocket data
@@ -93,13 +73,13 @@ MainWindow::MainWindow(QWidget *parent)
     this->addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, payloadInfoDockWidget);
 
     // Set up footer
-    statusBar = new QStatusBar();
+    this->statusBar = new QStatusBar();
 
-    lastUpdatedLabel = new QLabel(QString("Last data received 3 seconds ago"));
-    statusBar->addWidget(lastUpdatedLabel);
+    this->currentCoordinatesLabel = new QLabel(QString("---"));
+    this->statusBar->addWidget(currentCoordinatesLabel);
 
-    connectedToSerialLabel = new QLabel(QString("Connected to serial /dev/tty0"));
-    statusBar->addPermanentWidget(connectedToSerialLabel);
+    this->connectedToSerialLabel = new QLabel(QString("Connected to serial /dev/tty0"));
+    this->statusBar->addPermanentWidget(connectedToSerialLabel);
 
     this->setStatusBar(statusBar);
 
@@ -205,6 +185,17 @@ void MainWindow::BuildRocketTreeWidgetItems(QTreeWidget* wid) {
 void MainWindow::ShowPreferences() {
     SettingsWindow* beep = new SettingsWindow;
     beep->show();
+}
+
+void MainWindow::TogglePlayStop() {
+    qDebug() << this->mapView->coordinates();
+}
+
+void MainWindow::UpdateMap(QGeoCoordinate coords) {
+    qDebug() << coords;
+
+//    this->currentCoordinatesLabel->setText(QString::number(coords.latitude()) + " " + QString::number(coords.longitude()));
+//    QApplication::processEvents();
 }
 
 MainWindow::~MainWindow()

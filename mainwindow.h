@@ -14,6 +14,7 @@
 
 #include <QSizePolicy>
 #include <settingswindow.h>
+#include "map.h"
 #include <QMenuBar>
 #include <QtWidgets>
 
@@ -29,10 +30,10 @@ class MainWindow : public QMainWindow
     QAction* playStopAction;
 
     QStatusBar* statusBar;
-    QLabel* lastUpdatedLabel;
+    QLabel* currentCoordinatesLabel;
     QLabel* connectedToSerialLabel;
 
-    QQuickWidget* mapView;
+    Map* mapView;
 
     QDockWidget* rocketInfoDockWidget;
     QTreeWidget* rocketTreeWidget;
@@ -71,7 +72,10 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     void BuildRocketTreeWidgetItems(QTreeWidget* wid);
+
     void ShowPreferences();
+    void TogglePlayStop();
+    void UpdateMap(QGeoCoordinate coords);
     ~MainWindow();
 };
 #endif // MAINWINDOW_H
