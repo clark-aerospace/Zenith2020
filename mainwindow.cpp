@@ -1,13 +1,18 @@
 #include "mainwindow.h"
 
-
+#include <iostream>
+#include <QDebug>
+#include <QQmlContext>
+#include <QQuickItem>
+#include <QtPositioning>
+#include <QQmlProperty>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
 
     this->setWindowTitle(QString("Zenith"));
-    this->setUnifiedTitleAndToolBarOnMac(true);
+//    this->setUnifiedTitleAndToolBarOnMac(true);
 
     this->menuBar = new QMenuBar(0);
     this->setMenuBar(menuBar);
@@ -45,6 +50,21 @@ MainWindow::MainWindow(QWidget *parent)
     mapView = new QQuickWidget;
     mapView->setSource(QUrl("qrc:/map.qml"));
     mapView->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    mapView->setAttribute(Qt::WA_TranslucentBackground, true);
+    mapView->setClearColor(Qt::white);
+
+    QObject* map = mapView->rootObject()->findChild<QObject*>("map");
+    qDebug() << "center: ";
+    qDebug() << map->property("center").value<QGeoCoordinate>();
+
+    QGeoCoordinate* g = new QGeoCoordinate(20.8821458,-89.5466136);
+
+    qDebug() << map->setProperty("center", QVariant::fromValue(g));
+    qDebug() << map->setProperty("location", QVariant::fromValue(g));
+    qDebug() << QQmlProperty(map, "center").isValid();
+    qDebug() << QQmlProperty(map, "center").write(QVariant::fromValue(g));
+
+    qDebug() << map->property("center").value<QGeoCoordinate>();
 
     this->setCentralWidget(mapView);
 

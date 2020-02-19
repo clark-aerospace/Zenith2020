@@ -5,5 +5,6 @@
         <file>straighten-24px.svg</file>
         <file>play_arrow-24px.svg</file>
         <file>stop-24px.svg</file>
+        <file>my_location-24px.svg</file>
     </qresource>
 </RCC>

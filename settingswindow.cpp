@@ -1,6 +1,5 @@
 #include "settingswindow.h"
 
-#include <QtWidgets>
 #include <QSerialPortInfo>
 #include <QActionGroup>
 #include "tintableicon.h"
@@ -14,29 +13,42 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QMainWindow(parent)
     toolbar->setFloatable(false);
     toolbar->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextUnderIcon);
 
-    QAction* serialAction = new QAction;
+    this->serialAction = new QAction;
     TintableIcon* serialIcon = new TintableIcon(QString(":/wifi-24px.svg"));
 //    serialIcon->setTintColor(QColor("white"));
     serialIcon->setIsMask(true);
-    serialAction->setIcon(*serialIcon);
-    serialAction->setText("Serial");
-    serialAction->setCheckable(true);
+    this->serialAction->setIcon(*serialIcon);
+    this->serialAction->setText("Serial");
+    this->serialAction->setCheckable(true);
+    connect(this->serialAction, &QAction::triggered, this, &SettingsWindow::SetSerialTab);
 
 
-    QAction* unitsAction = new QAction;
+    this->unitsAction = new QAction;
     TintableIcon* unitsIcon = new TintableIcon(QString(":/straighten-24px.svg"));
     unitsIcon->setIsMask(true);
-    unitsAction->setIcon(*unitsIcon);
-    unitsAction->setText("Units");
-    unitsAction->setCheckable(true);
+    this->unitsAction->setIcon(*unitsIcon);
+    this->unitsAction->setText("Units");
+    this->unitsAction->setCheckable(true);
+    connect(this->unitsAction, &QAction::triggered, this, &SettingsWindow::SetUnitsTab);
+
+
+    this->locationAction = new QAction;
+    TintableIcon* locationIcon = new TintableIcon(QString(":/my_location-24px.svg"));
+    locationIcon->setIsMask(true);
+    this->locationAction->setIcon(*locationIcon);
+    this->locationAction->setText("Location");
+    this->locationAction->setCheckable(true);
+    connect(this->locationAction, &QAction::triggered, this, &SettingsWindow::SetLocationTab);
 
     QActionGroup* ac = new QActionGroup(this);
-    ac->addAction(serialAction);
-    ac->addAction(unitsAction);
-    serialAction->setChecked(true);
+    ac->addAction(this->serialAction);
+    ac->addAction(this->unitsAction);
+    ac->addAction(this->locationAction);
+    this->serialAction->setChecked(true);
 
-    toolbar->addAction(serialAction);
-    toolbar->addAction(unitsAction);
+    toolbar->addAction(this->serialAction);
+    toolbar->addAction(this->unitsAction);
+    toolbar->addAction(this->locationAction);
 
     this->addToolBar(toolbar);
 
@@ -44,8 +56,8 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QMainWindow(parent)
 
 
     // serial stuff
-    QComboBox* serialPort = new QComboBox;
-    QComboBox* baudRate = new QComboBox;
+    this->serialPort = new QComboBox;
+    this->baudRate = new QComboBox;
 
     QList<QSerialPortInfo> availablePorts = QSerialPortInfo::availablePorts();
 
@@ -66,16 +78,60 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QMainWindow(parent)
     po.setVerticalStretch(1);
     po.setHorizontalStretch(1);
 
-
-
-    QWidget* serialWidget = new QWidget;
+    this->serialWidget = new QWidget;
     serialWidget->setLayout(serialLayout);
     serialWidget->setSizePolicy(po);
 
+
+    // units stuff
+    this->units = new QComboBox;
+    units->addItems({"Metric", "Imperial"});
+    QFormLayout* unitsLayout = new QFormLayout;
+    unitsLayout->addRow(new QLabel("Units"), units);
+    unitsLayout->setFormAlignment(Qt::AlignLeft);
+    unitsLayout->setFieldGrowthPolicy(QFormLayout::FieldGrowthPolicy::AllNonFixedFieldsGrow);
+    unitsLayout->setSpacing(50);
+
+    this->unitsWidget = new QWidget;
+    unitsWidget->setLayout(unitsLayout);
+    unitsWidget->setSizePolicy(po);
+
+
+    // location stuff
+    this->latEntry = new QLineEdit;
+    this->longEntry = new QLineEdit;
+
+    QFormLayout* locationLayout = new QFormLayout;
+    locationLayout->addRow(new QLabel("Latitutde"), latEntry);
+    locationLayout->addRow(new QLabel("Longitude"), longEntry);
+
+    locationLayout->setFormAlignment(Qt::AlignLeft);
+    locationLayout->setFieldGrowthPolicy(QFormLayout::FieldGrowthPolicy::AllNonFixedFieldsGrow);
+    locationLayout->setSpacing(50);
+
+    this->locationWidget = new QWidget;
+    this->locationWidget->setLayout(locationLayout);
+    this->locationWidget->setSizePolicy(po);
+
+
     // all together
-    QStackedWidget* stack = new QStackedWidget;
-    stack->addWidget(serialWidget);
+    this->stack = new QStackedWidget;
+    this->stack->addWidget(this->serialWidget);
+    this->stack->addWidget(this->unitsWidget);
+    this->stack->addWidget(this->locationWidget);
 
     this->setFixedSize(500,350);
     this->setCentralWidget(stack);
+}
+
+void SettingsWindow::SetSerialTab() {
+    this->stack->setCurrentIndex(0);
+}
+
+void SettingsWindow::SetUnitsTab() {
+    this->stack->setCurrentIndex(1);
+}
+
+void SettingsWindow::SetLocationTab() {
+    this->stack->setCurrentIndex(2);
 }
