@@ -6,5 +6,7 @@
         <file>play_arrow-24px.svg</file>
         <file>stop-24px.svg</file>
         <file>my_location-24px.svg</file>
+        <file>home-24px.svg</file>
+        <file>Zenith.icns</file>
     </qresource>
 </RCC>

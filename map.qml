@@ -78,5 +78,27 @@ Item {
         center: QtPositioning.coordinate(45.6342791, -122.6516062) // Oslo
         zoomLevel: 16
         objectName: "map"
+
+        MapQuickItem {
+            id: startMarker
+
+            sourceItem: Image {
+                id: greenMarker
+                source: "qrc:///home-24px.svg"
+            }
+
+            coordinate : QtPositioning.coordinate(0, 0)
+            anchorPoint.x: greenMarker.width / 2
+            anchorPoint.y: greenMarker.height
+
+            MouseArea  {
+                drag.target: parent
+                anchors.fill: parent
+            }
+
+            onCoordinateChanged: {
+                map.updateRoute();
+            }
+        }
     }
 }
