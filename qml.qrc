@@ -8,5 +8,6 @@
         <file>my_location-24px.svg</file>
         <file>home-24px.svg</file>
         <file>Zenith.icns</file>
+        <file>map_marker.qml</file>
     </qresource>
 </RCC>

@@ -63,7 +63,8 @@ Item {
         // specify plugin parameters if necessary
         PluginParameter {
             name: "mapboxgl.mapping.additional_style_urls"
-            value: "mapbox://styles/mapbox/satellite-streets-v9"
+            value: "mapbox://styles/mapbox/streets-v9"
+//            value: "mapbox://styles/mapbox/satellite-streets-v9"
         }
 
         // PluginParameter {
@@ -75,30 +76,48 @@ Item {
     Map {
         anchors.fill: parent
         plugin: mapPlugin
-        center: QtPositioning.coordinate(45.6342791, -122.6516062) // Oslo
+        center: QtPositioning.coordinate(45.6342791, -122.6516062)
         zoomLevel: 16
         objectName: "map"
+        id: map
 
-        MapQuickItem {
-            id: startMarker
+        MapItemView {
+            id: itemContainer
+            objectName: "itemContainer"
 
-            sourceItem: Image {
-                id: greenMarker
-                source: "qrc:///home-24px.svg"
+            MapQuickItem {
+                id: beep
+
+                sourceItem: Image {
+                    id: testmarker
+                    source: "qrc:///home-24px.svg"
+
+                    width: 40
+                    height: 40
+                }
+
+                coordinate : QtPositioning.coordinate(45.6342791, -122.6516062)
+                anchorPoint.x: testmarker.width / 2
+                anchorPoint.y: testmarker.height
             }
 
-            coordinate : QtPositioning.coordinate(0, 0)
-            anchorPoint.x: greenMarker.width / 2
-            anchorPoint.y: greenMarker.height
+            MapQuickItem {
+                id: womp
 
-            MouseArea  {
-                drag.target: parent
-                anchors.fill: parent
-            }
+                sourceItem: Image {
+                    id: bomp
+                    source: "qrc:///my_location-24px.svg"
 
-            onCoordinateChanged: {
-                map.updateRoute();
+                    width: 40
+                    height: 40
+                }
+
+                coordinate : QtPositioning.coordinate(43.6342791, -127.6516062)
+                anchorPoint.x: bomp.width / 2
+                anchorPoint.y: bomp.height
             }
         }
+
+
     }
 }

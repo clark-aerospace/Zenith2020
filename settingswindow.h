@@ -35,6 +35,7 @@ public:
     void SetSerialTab();
     void SetUnitsTab();
     void SetLocationTab();
+    ~SettingsWindow();
 
 signals:
 

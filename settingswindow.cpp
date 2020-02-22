@@ -65,6 +65,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QMainWindow(parent)
         serialPort->addItem(availablePorts.at(i).portName());
     }
 
+    this->baudRate->addItems({"1200", "2400", "4800", "9600", "19200", "38400", "57600", "115200"});
     QFormLayout* serialLayout = new QFormLayout;
     serialLayout->addRow(new QLabel("Serial port"), serialPort);
     serialLayout->addRow(new QLabel("Baud rate"), baudRate);
@@ -122,6 +123,16 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QMainWindow(parent)
 
     this->setFixedSize(500,350);
     this->setCentralWidget(stack);
+
+
+    QSettings settings;
+    qDebug() << settings.allKeys();
+    if (settings.contains("serial/port")) this->serialPort->setCurrentText(settings.value("serial/port", "").toString());
+    if (settings.contains("serial/baud")) this->baudRate->setCurrentText(settings.value("serial/baud", "9600").toString());
+    if (settings.contains("units")) this->units->setCurrentText(settings.value("units", "Metric").toString());
+    if (settings.contains("location/lat")) this->latEntry->setText(settings.value("location/lat", 0).toString());
+    if (settings.contains("location/long")) this->longEntry->setText(settings.value("location/long", 0).toString());
+    else qDebug() << "no long";
 }
 
 void SettingsWindow::SetSerialTab() {
@@ -134,4 +145,15 @@ void SettingsWindow::SetUnitsTab() {
 
 void SettingsWindow::SetLocationTab() {
     this->stack->setCurrentIndex(2);
+}
+
+
+SettingsWindow::~SettingsWindow() {
+    QSettings settings;
+    settings.setValue("serial/port", this->serialPort->currentText());
+    settings.setValue("serial/baud", this->baudRate->currentText().toInt());
+    settings.setValue("units", this->units->currentText());
+    settings.setValue("location/lat", this->latEntry->text().toDouble());
+    settings.setValue("location/long", this->longEntry->text().toDouble());
+
 }

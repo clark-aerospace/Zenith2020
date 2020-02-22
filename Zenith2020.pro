@@ -26,12 +26,16 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     map.cpp \
+    rocketdatareceiver.cpp \
     settingswindow.cpp \
     tintableicon.cpp
 
 HEADERS += \
+    HelperStructs.h \
+    RocketData.h \
     mainwindow.h \
     map.h \
+    rocketdatareceiver.h \
     settingswindow.h \
     tintableicon.h
 

@@ -8,7 +8,7 @@
 #include <QQuickItem>
 #include <QtPositioning>
 #include <QQmlProperty>
-
+#include <QQuickView>
 
 class Map : public QQuickWidget
 {
@@ -21,6 +21,7 @@ public:
 
     void paintEvent(QPaintEvent *event);
 
+    bool addMarker(QGeoCoordinate coords);
     QGeoCoordinate coordinates();
     bool setCoordinates(QGeoCoordinate coords);
 

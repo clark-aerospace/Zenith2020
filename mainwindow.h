@@ -18,6 +18,9 @@
 #include <QMenuBar>
 #include <QtWidgets>
 
+#include <QSerialPort>
+#include "rocketdatareceiver.h"
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -67,6 +70,11 @@ class MainWindow : public QMainWindow
     QTreeWidgetItem* component_airbrakesItem;
     QTreeWidgetItem* component_airbrakesBatteryItem;
     QTreeWidgetItem* component_airbrakesTempItem;
+
+
+    // Serial stuff
+    QSerialPort serialPort;
+    RocketDataReceiver* rocketDataReciever;
 
 
 public:

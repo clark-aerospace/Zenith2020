@@ -7,6 +7,8 @@
 #include <QtPositioning>
 #include <QQmlProperty>
 
+#include "rocketdatareceiver.h"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -48,6 +50,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this->mapView, &Map::coordinatesChanged, this, &MainWindow::UpdateMap);
     this->setCentralWidget(this->mapView);
 
+    this->mapView->addMarker(QGeoCoordinate(0,0));
+
 
     // Rocket data
     rocketInfoDockWidget = new QDockWidget(QString("Rocket"));
@@ -84,6 +88,12 @@ MainWindow::MainWindow(QWidget *parent)
     this->setStatusBar(statusBar);
 
     this->showMaximized();
+
+
+    // Set up serial
+
+
+    this->rocketDataReciever = new RocketDataReceiver(&serialPort);
 
 
 }
@@ -188,11 +198,18 @@ void MainWindow::ShowPreferences() {
 }
 
 void MainWindow::TogglePlayStop() {
-    qDebug() << this->mapView->coordinates();
+    QSettings settings;
+    this->serialPort.setPortName(settings.value("serial/port", "").toString());
+    this->serialPort.setBaudRate(settings.value("serial/baud", 9600).toInt());
+    qDebug() << this->serialPort.baudRate();
+
+    if (this->serialPort.open(QIODevice::ReadOnly)) {
+        qDebug() << serialPort.errorString();
+    }
 }
 
 void MainWindow::UpdateMap(QGeoCoordinate coords) {
-    qDebug() << coords;
+//    qDebug() << coords;
 
 //    this->currentCoordinatesLabel->setText(QString::number(coords.latitude()) + " " + QString::number(coords.longitude()));
 //    QApplication::processEvents();
@@ -200,6 +217,6 @@ void MainWindow::UpdateMap(QGeoCoordinate coords) {
 
 MainWindow::~MainWindow()
 {
-
+    qDebug() << "WINGKSKDKSKWKIWID";
 }
 
