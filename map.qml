@@ -82,11 +82,12 @@ Item {
         id: map
 
         MapItemView {
-            id: itemContainer
-            objectName: "itemContainer"
+            id: iconContainer
+            objectName: "iconContainer"
 
             MapQuickItem {
-                id: beep
+                id: homeLocation
+                objectName: "homeLocation"
 
                 sourceItem: Image {
                     id: testmarker
@@ -102,7 +103,8 @@ Item {
             }
 
             MapQuickItem {
-                id: womp
+                id: rocketLocation
+                objectName: "rocketLocation"
 
                 sourceItem: Image {
                     id: bomp

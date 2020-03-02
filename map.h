@@ -25,6 +25,9 @@ public:
     QGeoCoordinate coordinates();
     bool setCoordinates(QGeoCoordinate coords);
 
+    bool setHomeCoordinates(QGeoCoordinate coords);
+    bool setRocketCoordinates(QGeoCoordinate coords);
+
     QObject* map;
 
 signals:

@@ -17,8 +17,6 @@ void Map::paintEvent(QPaintEvent *event) {
         emit coordinatesChanged(this->coordinates());
         this->lastCoords = this->coordinates();
     }
-
-
 }
 
 bool Map::addMarker(QGeoCoordinate coords) {
@@ -41,7 +39,17 @@ bool Map::addMarker(QGeoCoordinate coords) {
 }
 
 QGeoCoordinate Map::coordinates() {
-        return this->map->property("center").value<QGeoCoordinate>();
+    return this->map->property("center").value<QGeoCoordinate>();
+}
+
+bool Map::setHomeCoordinates(QGeoCoordinate coords) {
+    QObject* home = this->map->findChild<QObject*>("iconContainer")->findChild<QObject*>("homeLocation");
+    return home->setProperty("coordinate", QVariant::fromValue(coords));
+}
+
+bool Map::setRocketCoordinates(QGeoCoordinate coords) {
+    QObject* rocket = this->map->findChild<QObject*>("iconContainer")->findChild<QObject*>("rocketLocation");
+    return rocket->setProperty("coordinate", QVariant::fromValue(coords));
 }
 
 bool Map::setCoordinates(QGeoCoordinate coords) {

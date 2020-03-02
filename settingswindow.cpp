@@ -3,9 +3,14 @@
 #include <QSerialPortInfo>
 #include <QActionGroup>
 #include "tintableicon.h"
+#include "mainwindow.h"
 
 SettingsWindow::SettingsWindow(QWidget *parent) : QMainWindow(parent)
 {
+
+//    this->parent = (MainWindow*)parent;
+    this->setParent(parent);
+
     this->setWindowTitle("Preferences");
 
     QToolBar* toolbar = new QToolBar;
@@ -85,10 +90,15 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QMainWindow(parent)
 
 
     // units stuff
-    this->units = new QComboBox;
-    units->addItems({"Metric", "Imperial"});
+    this->distUnits = new QComboBox;
+    this->distUnits->addItems({"Metric", "Imperial"});
+
+    this->tempUnits = new QComboBox;
+    this->tempUnits->addItems({"Celsius", "Kelvin", "Fahrenheit"});
+
     QFormLayout* unitsLayout = new QFormLayout;
-    unitsLayout->addRow(new QLabel("Units"), units);
+    unitsLayout->addRow(new QLabel("Distance"), this->distUnits);
+    unitsLayout->addRow(new QLabel("Temperature"), this->tempUnits);
     unitsLayout->setFormAlignment(Qt::AlignLeft);
     unitsLayout->setFieldGrowthPolicy(QFormLayout::FieldGrowthPolicy::AllNonFixedFieldsGrow);
     unitsLayout->setSpacing(50);
@@ -129,7 +139,8 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QMainWindow(parent)
     qDebug() << settings.allKeys();
     if (settings.contains("serial/port")) this->serialPort->setCurrentText(settings.value("serial/port", "").toString());
     if (settings.contains("serial/baud")) this->baudRate->setCurrentText(settings.value("serial/baud", "9600").toString());
-    if (settings.contains("units")) this->units->setCurrentText(settings.value("units", "Metric").toString());
+    if (settings.contains("units/dist")) this->distUnits->setCurrentText(settings.value("units/dist", "Metric").toString());
+    if (settings.contains("units/temp")) this->tempUnits->setCurrentText(settings.value("units/temp", "Celsius").toString());
     if (settings.contains("location/lat")) this->latEntry->setText(settings.value("location/lat", 0).toString());
     if (settings.contains("location/long")) this->longEntry->setText(settings.value("location/long", 0).toString());
     else qDebug() << "no long";
@@ -148,12 +159,18 @@ void SettingsWindow::SetLocationTab() {
 }
 
 
-SettingsWindow::~SettingsWindow() {
+void SettingsWindow::closeEvent(QCloseEvent* ev) {
+    qDebug() << "close event";
     QSettings settings;
     settings.setValue("serial/port", this->serialPort->currentText());
     settings.setValue("serial/baud", this->baudRate->currentText().toInt());
-    settings.setValue("units", this->units->currentText());
+    settings.setValue("units/dist", this->distUnits->currentText());
+    settings.setValue("units/temp", this->tempUnits->currentText());
     settings.setValue("location/lat", this->latEntry->text().toDouble());
     settings.setValue("location/long", this->longEntry->text().toDouble());
+
+    ((MainWindow*)(this->parent()))->UpdatePrefs();
+
+    qDebug() << "closed";
 
 }

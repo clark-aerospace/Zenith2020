@@ -10,6 +10,8 @@ class SettingsWindow : public QMainWindow
 {
     Q_OBJECT
 
+    QWidget* mainWindow;
+
     QAction* serialAction;
     QAction* unitsAction;
     QAction* locationAction;
@@ -22,7 +24,9 @@ class SettingsWindow : public QMainWindow
 
     QWidget* serialWidget;
 
-    QComboBox* units;
+    QComboBox* distUnits;
+    QComboBox* tempUnits;
+
     QWidget* unitsWidget;
 
     QLineEdit* latEntry;
@@ -35,7 +39,7 @@ public:
     void SetSerialTab();
     void SetUnitsTab();
     void SetLocationTab();
-    ~SettingsWindow();
+    void closeEvent(QCloseEvent* ev);
 
 signals:
 

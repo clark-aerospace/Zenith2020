@@ -80,10 +80,11 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     void BuildRocketTreeWidgetItems(QTreeWidget* wid);
-
+    void UpdateRocketData(RocketData updatedData);
     void ShowPreferences();
     void TogglePlayStop();
     void UpdateMap(QGeoCoordinate coords);
+    void UpdatePrefs();
     ~MainWindow();
 };
 #endif // MAINWINDOW_H

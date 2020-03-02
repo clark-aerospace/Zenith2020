@@ -28,7 +28,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->menu->addAction(this->prefAction);
 
-
     // Toolbar
     this->toolbar = new QToolBar();
     this->toolbar->setMovable(false);
@@ -95,7 +94,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->rocketDataReciever = new RocketDataReceiver(&serialPort);
 
+    connect(this->rocketDataReciever, &RocketDataReceiver::rocketDataUpdated, this, &MainWindow::UpdateRocketData);
 
+    this->UpdatePrefs();
+}
+
+void MainWindow::UpdateRocketData(RocketData updatedData) {
+    this->latItem->setText(1, QString("owo"));
+    this->longItem->setText(1, QString("uwu"));
 }
 
 void MainWindow::BuildRocketTreeWidgetItems(QTreeWidget* wid) {
@@ -193,18 +199,21 @@ void MainWindow::BuildRocketTreeWidgetItems(QTreeWidget* wid) {
 }
 
 void MainWindow::ShowPreferences() {
-    SettingsWindow* beep = new SettingsWindow;
+    SettingsWindow* beep = new SettingsWindow((QWidget*)this);
     beep->show();
 }
 
 void MainWindow::TogglePlayStop() {
+    this->mapView->setHomeCoordinates(QGeoCoordinate(0,0));
+    this->mapView->setRocketCoordinates(QGeoCoordinate(20,40));
+
     QSettings settings;
     this->serialPort.setPortName(settings.value("serial/port", "").toString());
     this->serialPort.setBaudRate(settings.value("serial/baud", 9600).toInt());
     qDebug() << this->serialPort.baudRate();
 
     if (this->serialPort.open(QIODevice::ReadOnly)) {
-        qDebug() << serialPort.errorString();
+//        qDebug() << serialPort.errorString();
     }
 }
 
@@ -214,6 +223,13 @@ void MainWindow::UpdateMap(QGeoCoordinate coords) {
 //    this->currentCoordinatesLabel->setText(QString::number(coords.latitude()) + " " + QString::number(coords.longitude()));
 //    QApplication::processEvents();
 }
+
+
+void MainWindow::UpdatePrefs() {
+    QSettings settings;
+    this->mapView->setHomeCoordinates(QGeoCoordinate(settings.value("location/lat", "0").toDouble(), settings.value("location/long", "0").toDouble()));
+}
+
 
 MainWindow::~MainWindow()
 {
